@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-"""
+#"""
 import alpha_vantage
 import requests
 
@@ -25,20 +25,21 @@ from alpha_vantage.timeseries import TimeSeries
 
 
 
-    """
+ #   """
 
 
 
 
 app = Flask(__name__)
 
+"""
 @app.route('/')
 def index():
   return render_template('index.html')
-
-
-
 """
+
+
+#"""
 @app.route('/')
 def index():
     ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
@@ -58,7 +59,7 @@ def index():
     output_file('plot.html') 
     return render_template('plot.html')   
 
-"""
+#"""
 @app.route('/about')
 def about():
   return render_template('about.html')
@@ -71,8 +72,5 @@ if __name__ == '__main__':
     app.run(port=33507)
 
  
-    
-    
-
   
 
