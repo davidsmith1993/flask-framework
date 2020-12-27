@@ -36,6 +36,9 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   return render_template('index.html')
+  
+  
+  """
 """
 output_file('C:/Users/dsmit/Documents/flasktest/templates/plot.html') 
 
@@ -54,6 +57,8 @@ source = ColumnDataSource(new_data)
 p = figure(x_axis_type="datetime")
 p.line('x', 'y', source = source)
 save(p)
+
+"""
 
 #"""
 @app.route('/')
