@@ -36,10 +36,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   return render_template('index.html')
-  
-  
-  """
-
+"""
 output_file('C:/Users/dsmit/Documents/flasktest/templates/plot.html') 
 
 ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
@@ -58,29 +55,9 @@ p = figure(x_axis_type="datetime")
 p.line('x', 'y', source = source)
 save(p)
 
-
-
 #"""
 @app.route('/')
 def index():
-    """
-    output_file('C:/Users/dsmit/Documents/flasktest/templates/plot.html') 
-
-    ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
-    # Get json object with the intraday data and another with  the call's metadata
-    data, meta_data = ts.get_intraday('GOOGL')
-    
-    data['date'] = data.index
-    
-    new_data = {'x' : data.date,
-            'y'   : data['1. open'].to_list(),
-            }
-    
-    source = ColumnDataSource(new_data)
-    #output_file("line.html")
-    p = figure(x_axis_type="datetime")
-    p.line('x', 'y', source = source)
-    save(p)
 
     return render_template('plot.html')   
 
