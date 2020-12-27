@@ -39,7 +39,7 @@ def index():
   
   
   """
-"""
+
 output_file('C:/Users/dsmit/Documents/flasktest/templates/plot.html') 
 
 ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
@@ -58,12 +58,12 @@ p = figure(x_axis_type="datetime")
 p.line('x', 'y', source = source)
 save(p)
 
-"""
+
 
 #"""
 @app.route('/')
 def index():
-    
+    """
     output_file('C:/Users/dsmit/Documents/flasktest/templates/plot.html') 
 
     ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
