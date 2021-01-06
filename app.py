@@ -41,15 +41,25 @@ def fetch(ticker) :
     
 
     ts = TimeSeries(key='MO8BPQU6ZKVP11BJ',output_format='pandas')
-    data, meta_data = ts.get_intraday(ticker)
-        
+    data, meta_data = ts.get_intraday(ticker)    
     data['date'] = data.index
+    data2, meta_data2 = ts.get_daily_adjusted(ticker)    
+    data2['date'] = data.index
+     
+    
+    """
+    
+    if request.form.get('Close'):
+        line = '4. close'
+    if request.form.get('Open'):
+        line = '1. Open'    
         
-    new_data = {'x' : data.date,'y'   : data['1. open'].to_list(),
+    new_data = {'x' : data.date,'y'   : data[line].to_list(),
            }
+    """
         
-    df = ColumnDataSource(new_data)
-    return(df) 
+    #df = ColumnDataSource(new_data)
+    return(data, data2)
 
 
 
@@ -58,20 +68,42 @@ def fetch(ticker) :
 
 
 
-def make_figure(df):
+def make_figure(data, data2):
+    p=figure(x_axis_type="datetime", width=400, height=300)
+    if request.form.get('Close'):
+        p.line(x=data['date'].values, y=data['4. close'].values,line_width=2, legend='Close')
+    if request.form.get('Adj. Close'):
+        p.line(x=data2['date'].values, y=data2['5. adjusted close'].values,line_width=2, line_color="green", legend='Adj. Close')
+    if request.form.get('Open'):
+        p.line(x=data['date'].values, y=data['1. open'].values,line_width=2, line_color="red", legend='Open')
+    if request.form.get('Adj. Open'):
+        p.line(x=data2['date'].values, y=data2['1. open'].values,line_width=2, line_color="purple", legend='Adj. Open')
+    
+    
+    
 
-	p=figure(x_axis_type="datetime", width=400, height=300)
-	p.line('x', 'y', source = df)
 
 
-	p.grid.grid_line_alpha=0.3
-	p.xaxis.axis_label = 'Date'
-	p.yaxis.axis_label = 'Price'
-	output_file('templates/plot.html')
-	save(p)
-	script, div=components(p)
-	return(script, div)
+    p.grid.grid_line_alpha=0.3
+    p.xaxis.axis_label = 'Date'
+    p.yaxis.axis_label = 'Price'
+    output_file('templates/plot.html')
+    save(p)
+    script, div=components(p)
+    return(script, div)
 
+
+
+"""
+        if request.form.get('Close'):
+            p.line(x=df['Date'].values, y=df['Close'].values,line_width=2, legend='Close')
+        if request.form.get('Adj. Close'):
+            p.line(x=df['Date'].values, y=df['Adj. Close'].values,line_width=2, line_color="green", legend='Adj. Close')
+        if request.form.get('Open'):
+            p.line(x=df['Date'].values, y=df['Open'].values,line_width=2, line_color="red", legend='Open')
+        if request.form.get('Adj. Open'):
+            p.line(x=df['Date'].values, y=df['Adj. Open'].values,line_width=2, line_color="purple", legend='Adj. Open')
+            """
 
 
 app = Flask(__name__)
@@ -82,16 +114,17 @@ app.vars = {}
 
 @app.route('/')
 def index():
-  return render_template('index.html')
+  return render_template('index_test_lines.html')
 
 
 @app.route('/plotpage', methods=['POST'])
 def plotpage():
-	tickStr=request.form['tickerText']
-	app.vars['ticker']=tickStr.upper()
-	df=fetch(app.vars['ticker'])
-	script,div=make_figure(df)
-	return render_template('plot.html', script=script, div=div)
+    tickStr=request.form['tickerText']
+    
+    app.vars['ticker']=tickStr.upper()
+    data, data2 =fetch(app.vars['ticker'])
+    script,div=make_figure(data, data2)
+    return render_template('plot.html', script=script, div=div)
 
 
 
